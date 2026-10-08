@@ -6,7 +6,9 @@ app = Flask(__name__)
 def all_data():
     with open("data.txt", "r") as file:
         content = file.read()
+        # if content != "":
         return eval(content)
+
 
 @app.route('/auth/signup/<string:email>/<string:password>/<string:username><string:other_details>')
 def signup(username, password, email, other_details={}):
@@ -142,4 +144,4 @@ def reset_userdata(email):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port='5656', host='0.0.0.0')

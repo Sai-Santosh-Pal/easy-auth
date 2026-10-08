@@ -1,1 +1,1 @@
-[{'email': 'saisantoshpal2010@gmail.com', 'password': '123', 'other_details': {'phone_number': '0123456789', 'country': 'india'}, 'username': 'new', 'data': [{'liked': '2010', 'total_articles': '2'}]}]
+[]
