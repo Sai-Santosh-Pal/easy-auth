@@ -45,5 +45,28 @@ def remove(email):
         removed = eval(content)
     return removed
     
+@app.route('/edit/<string:current_email>/<string:which>/<string:updated>')
+def edit(current_email, which, updated):
+    with open("data.txt", "r") as file:
+        content = file.read()
+        data = eval(content)
+    index = 0
+    for i in data:
+        # print(current_email)
+        # print(i['email'])
+        # print(i['email'] == current_email)
+        if i['email'] == current_email:
+            i[which] = updated
+            print(i)
+            print(data)
+            with open("data.txt", "w") as file:
+                file.write(str(data))
+            return all_data()
+            break
+        else:
+            index +=1 
+    return data
+    
+
 if __name__ == "__main__":
     app.run(debug=True)
