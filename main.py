@@ -9,7 +9,6 @@ def all_data():
         # if content != "":
         return eval(content)
 
-
 @app.route('/auth/signup/<string:email>/<string:password>/<string:username><string:other_details>')
 def signup(username, password, email, other_details={}):
     with open("data.txt", "r") as file:
@@ -24,7 +23,6 @@ def signup(username, password, email, other_details={}):
         updated = eval(content)
     return updated
     
-
 @app.route('/auth/remove/<string:email>')
 def remove(email):
     with open("data.txt", "r") as file:
