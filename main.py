@@ -2,18 +2,28 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/')
-def all_data():
-    with open("data.txt", "r") as file:
-        content = file.read()
-        # if content != "":
-        return eval(content)
+@app.route("/new_project/<project>")
+def new_project(project):
+    try:
+        with open(project+".txt", "x") as file:
+            file.write('[]')
+            return "[]"
+    except Exception as e:
+        return f"Project already exists, rename it! - {e}"
 
-@app.route('/auth/signup/<string:email>/<string:password>/<string:username><string:other_details>')
-def signup(username, password, email, other_details={}):
-    with open("data.txt", "r") as file:
-        content = file.read()
-        data = eval(content)
+@app.route('/<project>')
+def all_data(project):
+    try:
+        with open(project+".txt", "r") as file:
+            content = file.read()
+            # if content != "":
+            return eval(content)
+    except Exception as e:
+        return f"Project has not been created yet! - {e}"
+
+@app.route('/<project>/auth/signup/<string:email>/<string:password>/<string:username><string:other_details>')
+def signup(project, username, password, email, other_details={}):
+    data = all_data(project)
     data.append({"username": username, "password": password, "email": email, "other_details": other_details, "data": [{}]})
     # return data
     with open("data.txt", "w") as file:
@@ -23,11 +33,10 @@ def signup(username, password, email, other_details={}):
         updated = eval(content)
     return updated
     
-@app.route('/auth/remove/<string:email>')
+@app.route('/<project>/auth/remove/<string:email>')
 def remove(email):
-    with open("data.txt", "r") as file:
-        content = file.read()
-        data = eval(content)
+    data = all_data(project)
+
     indexRemove = 0
     for i in data:
         if i['email'] == email:
@@ -45,11 +54,10 @@ def remove(email):
         removed = eval(content)
     return removed
     
-@app.route('/auth/edit/<string:current_email>/<string:which>/<string:updated>')
-def edit(current_email, which, updated):
-    with open("data.txt", "r") as file:
-        content = file.read()
-        data = eval(content)
+@app.route('/<project>/auth/edit/<string:current_email>/<string:which>/<string:updated>')
+def edit(project, current_email, which, updated):
+    data = all_data(project)
+
     index = 0
     for i in data:
         # print(current_email)
@@ -67,11 +75,9 @@ def edit(current_email, which, updated):
             index +=1 
     return data
 
-@app.route('/auth/login/<string:email>/<string:password>/')
-def login(email, password):
-    with open("data.txt", "r") as file:
-        content = file.read()
-        data = eval(content)
+@app.route('/<project>/auth/login/<string:email>/<string:password>/')
+def login(email, password, project):
+    data = all_data(project)
     for i in data:
         if i['email'] == email:
             if i['password'] == password:
@@ -81,9 +87,9 @@ def login(email, password):
     else:
         return [{'status': 'user not found, sign up instead'}, 404]
 
-@app.route('/auth/other_data/<string:email>/<string:toadd>/<string:val>')
-def set_otherdata(email, toadd,val):
-    content = all_data()
+@app.route('/<project>/auth/other_data/<string:email>/<string:toadd>/<string:val>')
+def set_otherdata(project,email, toadd,val):
+    content = all_data(project)
     for i in content:
         if i['email'] == email:
             data = i['other_details']
@@ -98,9 +104,9 @@ def set_otherdata(email, toadd,val):
         return [{'status': 'user not found, sign up instead'}, 404]
 
 
-@app.route('/data/<string:email>')
-def userdata(email):
-    content = all_data()
+@app.route('/<project>/data/<string:email>')
+def userdata(email, project):
+    content = all_data(project)
     # print(content)
     for i in content:
         if i['email'] == email:
@@ -108,9 +114,9 @@ def userdata(email):
     else:
         return [{'status': 'user not found, sign up instead'}, 404]
     
-@app.route('/data/set/<string:email>/<string:toadd>/<string:val>')
-def set_userdata(email, toadd,val):
-    content = all_data()
+@app.route('/<project>/data/set/<string:email>/<string:toadd>/<string:val>')
+def set_userdata(email, project,toadd,val):
+    content = all_data(project)
     for i in content:
         if i['email'] == email:
             data = i['data']
@@ -125,9 +131,9 @@ def set_userdata(email, toadd,val):
         return [{'status': 'user not found, sign up instead'}, 404]
 
 
-@app.route('/data/reset/<string:email>')
-def reset_userdata(email):
-    content = all_data()
+@app.route('/<project>/data/reset/<string:email>')
+def reset_userdata(email, password):
+    content = all_data(project)
     for i in content:
         if i['email'] == email:
             i['data'] = [{}]
