@@ -1,0 +1,1 @@
+[{'username': 'sai', 'password': 'admin123', 'email': 'sai@gmail.com', 'other_details': '{"phone": 12345}', 'data': [{}]}]
