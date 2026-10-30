@@ -1,6 +1,12 @@
 from flask import Flask 
+import flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app, origins=[
+    "http://127.0.0.1:5500",
+    "https://easy-auth-seven.vercel.app/"
+])
 
 @app.route("/new_project/<string:project>")
 def new_project(project):
